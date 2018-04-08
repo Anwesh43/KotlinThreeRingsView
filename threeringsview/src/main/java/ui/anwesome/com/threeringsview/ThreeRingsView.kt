@@ -4,6 +4,7 @@ package ui.anwesome.com.threeringsview
  * Created by anweshmishra on 09/04/18.
  */
 
+import android.app.Activity
 import android.content.*
 import android.view.*
 import android.graphics.*
@@ -137,6 +138,14 @@ class ThreeRingsView (ctx : Context) : View(ctx) {
             threeRings.startUpdating {
                 animator.start()
             }
+        }
+    }
+
+    companion object {
+        fun create(activity : Activity) : ThreeRingsView {
+            val view : ThreeRingsView = ThreeRingsView(activity)
+            activity.setContentView(view)
+            return view
         }
     }
 }
