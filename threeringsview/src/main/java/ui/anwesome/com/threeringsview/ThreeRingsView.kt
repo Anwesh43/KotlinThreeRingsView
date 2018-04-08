@@ -114,4 +114,27 @@ class ThreeRingsView (ctx : Context) : View(ctx) {
             state.startUpdating(startcb)
         }
     }
+
+    data class Renderer (var view : ThreeRingsView) {
+
+        private val animator : Animator = Animator(view)
+
+        private val threeRings : ThreeRings = ThreeRings(0)
+
+        fun render(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#212121"))
+            threeRings.draw(canvas, paint)
+            animator.animate {
+                threeRings.update {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            threeRings.startUpdating {
+                animator.start()
+            }
+        }
+    }
 }
