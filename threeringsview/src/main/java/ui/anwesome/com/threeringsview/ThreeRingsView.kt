@@ -88,12 +88,13 @@ class ThreeRingsView (ctx : Context) : View(ctx) {
             val w : Float = canvas.width.toFloat()
             val h : Float = canvas.height.toFloat()
             val r : Float = Math.min(w, h)/9
+            paint.style = Paint.Style.STROKE
             paint.color = Color.parseColor("#ec7b11")
             paint.strokeWidth = Math.min(w,h)/55
             paint.strokeCap = Paint.Cap.ROUND
             for (i in 0..2) {
                 canvas.save()
-                canvas.translate(w/2 + (w/2 -r) * (1 - i) * this.state.scales[1], -2 * r + (h/2 + 2 * r) * (1 - this.state.scales[2 + i]))
+                canvas.translate(w/2 + (w/2 -r) * (i - 1) * this.state.scales[1], -2 * r + (h/2 + 2 * r) * (1 - this.state.scales[2 + i]))
                 val path : Path = Path()
                 for (j in 0..(360 * this.state.scales[0]).toInt()) {
                     val x : Float = (r * Math.cos( j * Math.PI/180)).toFloat()
