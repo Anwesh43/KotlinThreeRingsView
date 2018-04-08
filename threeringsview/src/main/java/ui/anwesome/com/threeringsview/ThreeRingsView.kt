@@ -27,7 +27,7 @@ class ThreeRingsView (ctx : Context) : View(ctx) {
 
     data class State (var dir : Float = 0f, var prevScale : Float = 0f, var j : Int = 0) {
 
-        val scales : Array<Float> = arrayOf(0f, 0f, 0f)
+        val scales : Array<Float> = arrayOf(0f, 0f, 0f, 0f, 0f)
 
         fun update(stopcb : (Float) -> Unit) {
             scales[j] += 0.1f * dir
@@ -77,6 +77,41 @@ class ThreeRingsView (ctx : Context) : View(ctx) {
             if (animated) {
                 animated = false
             }
+        }
+    }
+
+    data class ThreeRings (var i : Int, val state : State = State()) {
+        fun draw (canvas : Canvas, paint : Paint) {
+            val w : Float = canvas.width.toFloat()
+            val h : Float = canvas.height.toFloat()
+            val r : Float = Math.min(w, h)/9
+            paint.color = Color.parseColor("#ec7b11")
+            paint.strokeWidth = Math.min(w,h)/55
+            paint.strokeCap = Paint.Cap.ROUND
+            for (i in 0..2) {
+                canvas.save()
+                canvas.translate(w/2 + (w/2 -r) * (1 - i) * this.state.scales[1], -2 * r + (h/2 + 2 * r) * (1 - this.state.scales[2 + i]))
+                val path : Path = Path()
+                for (j in 0..(360 * this.state.scales[0]).toInt()) {
+                    val x : Float = (r * Math.cos( j * Math.PI/180)).toFloat()
+                    val y : Float = (r * Math.sin( j * Math.PI/180)).toFloat()
+
+                    if (j == 0) {
+                        path.moveTo(x, y)
+                    }
+                    else {
+                        path.lineTo(x, y)
+                    }
+                }
+                canvas.drawPath(path, paint)
+                canvas.restore()
+            }
+        }
+        fun update (stopcb : (Float) -> Unit) {
+            state.update(stopcb)
+        }
+        fun startUpdating (startcb : () -> Unit) {
+            state.startUpdating(startcb)
         }
     }
 }
